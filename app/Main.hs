@@ -18,4 +18,4 @@ main = scotty 23358 $ do
 --}
 main :: IO ()
 main = do 
-    print $ join $ HM.lookup "user_id"  `fmap` (decode "{\"user_id\":123,\"age\":123,\"sex\":\"male\",\"info\":{\"aaa\":123}}" :: Maybe Object)
+    print $ (decode "{\"user_id\":123,\"age\":123,\"sex\":\"male\",\"info\":{\"aaa\":123}}" :: Maybe Object)
