@@ -4,7 +4,8 @@ module Main where
 import Web.Scotty
 import Data.Aeson
 import Data.ByteString.Lazy
-import qualified Data.Map.Lazy as Map
+import Control.Monad
+import qualified Data.HashMap.Lazy as HM 
 import Lib
 {--
 main :: IO ()
@@ -17,4 +18,4 @@ main = scotty 23358 $ do
 --}
 main :: IO ()
 main = do 
-    print $ (decode "{\"user_id\":123,\"age\":123,\"sex\":\"male\",\"info\":{\"aaa\":123}}" :: Maybe Object)
+    print $ join $ HM.lookup "user_id"  `fmap` (decode "{\"user_id\":123,\"age\":123,\"sex\":\"male\",\"info\":{\"aaa\":123}}" :: Maybe Object)
