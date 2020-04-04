@@ -14,7 +14,7 @@ module Lib(
 import Data.Maybe
 import Data.Eq
 import Data.Aeson
-import Data.ByteString
+import qualified Data.ByteString as BS
 import Data.Text
 import Data.Scientific
 import Control.Monad
@@ -73,6 +73,17 @@ instance FromValue Bool where
     convert (Bool b) = Just b
     convert _ = Nothing
 
+instance FromValue Sex where
+    convert (String "male") = Just Male
+    convert (String "female") = Just Female
+    convert _ = Nothing
+
+instance FromValue Role where
+    convert (String "owner") = Just Owner
+    convert (String "admin") = Just Admin
+    convert (String "member") = Just Member
+    convert _ = Nothing
+
 getData :: FromValue a => Text -> Object -> Maybe a
 getData k o = do
     t <- HM.lookup k o
@@ -82,25 +93,21 @@ getMessageInfo :: Object -> MessageInfo
 getMessageInfo obj = MessageInfo {
     user = UserInfo {
         qq = getData "user_id" obj,
-        nickname = Nothing,
-        sex = Nothing,
-        age = Nothing,
-        card = Nothing,
-        area = Nothing,
-        level = Nothing,
-        role = Nothing,
-        title = Nothing 
+        nickname = sender >>= getData "nickname",
+        sex = sender >>= getData "sex",
+        age = sender >>= getData "age",
+        card = sender >>= getData "card",
+        area = sender >>= getData "area",
+        level = sender >>= getData "level",
+        role = sender >>= getData "role",
+        title = sender >>= getData "title" 
     },
-    group_id = Nothing,
-    font = Nothing,
-    message = "Nothing",
+    group_id = getData "group_id" obj,
+    font = getData "font" obj,
+    message = Data.Text.concat $ maybeToList $ getData "message" obj,
     anonymous = Nothing
 } where
     sender :: Maybe Object
-    sender = do
-        sdr <- HM.lookup "sender" obj
-        convert sdr
+    sender = getData "sender" obj
     anon :: Maybe Object
-    anon = do
-        an <- HM.lookup "anonymous" obj
-        convert an
+    anon = getData "anonymous" obj
