@@ -18,4 +18,4 @@ main = scotty 23358 $ do
 --}
 main :: IO ()
 main = do 
-    print $ (decode "{\"user_id\":123,\"age\":123,\"sex\":\"male\",\"info\":{\"aaa\":123}}" :: Maybe Object)
+    print $ getMessageInfo `fmap` (decode "{\"user_id\":123,\"age\":123,\"sex\":\"male\",\"sender\":{\"nickname\":\"dgsgh\"}}" :: Maybe Object)
