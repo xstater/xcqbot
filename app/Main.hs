@@ -5,8 +5,9 @@ import Web.Scotty
 import Data.Aeson
 import Data.ByteString.Lazy
 import Control.Monad
+import Data.Text
 import qualified Data.HashMap.Lazy as HM 
-import Lib
+import Resolver
 
 main :: IO ()
 main = scotty 23358 $ do
@@ -14,7 +15,8 @@ main = scotty 23358 $ do
         --msgdata <- (jsonData :: ActionM RawInfo) `rescue` (\msg -> (liftAndCatchIO $ print msg) >> finish)
         bodydata <- body
         --liftAndCatchIO $ print msgdata
-        liftAndCatchIO $ print $ getMessageInfo <$> (decode bodydata :: Maybe Object)
+        liftAndCatchIO $ print $ ((decode bodydata :: Maybe Object) >>= getItem "post_type" :: Maybe Text)
+        --liftAndCatchIO $ print $ getEventInfo <$> (decode bodydata :: Maybe Object)
         text "asdsad"
 
 {--

@@ -27,7 +27,9 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Dispatcher,
+      Resolver,
+      Callbacks.PrivateMessage
   other-modules:
       Paths_xcqbot
   hs-source-dirs:
@@ -56,6 +58,7 @@ executable xcqbot-exe
     , bytestring
     , aeson
     , unordered-containers
+    , text
   default-language: Haskell2010
 
 test-suite xcqbot-test
