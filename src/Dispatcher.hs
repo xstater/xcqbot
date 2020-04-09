@@ -13,5 +13,5 @@ import Callbacks.PrivateMessage
 
 dispatch :: Object -> ActionM ()
 dispatch obj = do
-    text $ isPrivateMessageM obj >> onPrivateMessage FromFriend (Sender { qq = Nothing,nickname = Nothing ,sex = Nothing,age = Nothing})
+    --text $ isPrivateMessageM obj >> onPrivateMessage FromFriend (Sender { qq = Nothing,nickname = Nothing ,sex = Nothing,age = Nothing})
     return ()

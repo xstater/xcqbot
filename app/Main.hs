@@ -23,9 +23,11 @@ main = scotty 23358 $ do
 
 main :: IO ()
 main = do
-    print $ obj >>= R.isMessageM
-    print $ obj >>= R.isPrivateMessageM
-    print $ obj >>= R.isPrivateMessageM >> PM.onPrivateMessage PM.FromFriend (PM.Sender { qq = Nothing,nickname = Nothing ,sex = Nothing,age = Nothing})
+    print $ obj >>= PM.isPrivateMessageM
+    print $ obj >>= PM.isPrivateMessageM >> PM.onPrivateMessage 0 0 PM.FromFriend (PM.Sender { qq = Nothing,nickname = Nothing ,sex = Nothing,age = Nothing})
+    print $ obj >>= PM.getSender
+    print $ obj >>= PM.getMessageFrom 
+    print $ encode $ PM.Reply {reply = "asdasd", auto_escape = True}
     where
         obj :: Maybe Object 
-        obj = decode "{\"post_type\":\"message\",\"message_type\":\"private\"}"
+        obj = decode "{\"post_type\":\"message\",\"message_type\":\"private\",\"sub_type\":\"friend\",\"sender\":{\"user_id\":123,\"sex\":\"male\"}}"

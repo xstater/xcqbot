@@ -3,10 +3,14 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Resolver(
-    resolve,
+    Resolvable(resolve),
     getItem,
-    isMessageM,
-    isPrivateMessageM
+    getPostType,
+    getMessageType,
+    getNoticeType,
+    getRequestType,
+    getSubType,
+    eqStringM
 )where
 
 import Data.Scientific
@@ -72,14 +76,3 @@ getSubType = getItem "sub_type"
 eqStringM :: Text -> Text -> Maybe ()
 eqStringM str1 str2 = if str1 == str2 then Just () else Nothing
 
-isMessageM :: Object -> Maybe ()
-isMessageM obj = getPostType obj >>= eqStringM "message"
-
-isPrivateMessageM :: Object -> Maybe ()
-isPrivateMessageM obj = isMessageM obj >> getMessageType obj >>= eqStringM "private"
-
-isGroupMessageM :: Object -> Maybe ()
-isGroupMessageM obj = isMessageM obj >> getMessageType obj >>= eqStringM "group"
-
-isDiscussMessageM :: Object -> Maybe ()
-isDiscussMessageM obj = isMessageM obj >> getMessageType obj >>= eqStringM "discuss"
