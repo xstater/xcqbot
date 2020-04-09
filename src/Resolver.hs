@@ -4,7 +4,9 @@
 
 module Resolver(
     resolve,
-    getItem
+    getItem,
+    isMessageM,
+    isPrivateMessageM
 )where
 
 import Data.Scientific
@@ -51,3 +53,33 @@ instance Resolvable Array where
 
 getItem :: Resolvable a => Text -> Object -> Maybe a
 getItem k o = (HM.lookup k o) >>= resolve 
+
+getPostType :: Object -> Maybe Text
+getPostType = getItem "post_type"
+
+getMessageType :: Object -> Maybe Text
+getMessageType = getItem "message_type"
+
+getNoticeType :: Object -> Maybe Text
+getNoticeType = getItem "notice_type"
+
+getRequestType :: Object -> Maybe Text
+getRequestType = getItem "request_type"
+
+getSubType :: Object -> Maybe Text
+getSubType = getItem "sub_type"
+
+eqStringM :: Text -> Text -> Maybe ()
+eqStringM str1 str2 = if str1 == str2 then Just () else Nothing
+
+isMessageM :: Object -> Maybe ()
+isMessageM obj = getPostType obj >>= eqStringM "message"
+
+isPrivateMessageM :: Object -> Maybe ()
+isPrivateMessageM obj = isMessageM obj >> getMessageType obj >>= eqStringM "private"
+
+isGroupMessageM :: Object -> Maybe ()
+isGroupMessageM obj = isMessageM obj >> getMessageType obj >>= eqStringM "group"
+
+isDiscussMessageM :: Object -> Maybe ()
+isDiscussMessageM obj = isMessageM obj >> getMessageType obj >>= eqStringM "discuss"
