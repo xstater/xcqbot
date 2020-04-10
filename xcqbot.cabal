@@ -28,8 +28,9 @@ source-repository head
 library
   exposed-modules:
       Dispatcher,
-      Resolver,
-      Callbacks.PrivateMessage
+      Callbacks.PrivateMessage,
+      Resolvers.Resolver,
+      Resolvers.PrivateMessage
   other-modules:
       Paths_xcqbot
   hs-source-dirs:

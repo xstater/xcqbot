@@ -2,7 +2,7 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
 
-module Resolver(
+module Resolvers.Resolver(
     Resolvable(resolve),
     getItem,
     getPostType,
