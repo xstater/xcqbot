@@ -29,8 +29,10 @@ library
   exposed-modules:
       Dispatcher,
       Callbacks.PrivateMessage,
+      Callbacks.GroupMessage,
       Resolvers.Resolver,
-      Resolvers.PrivateMessage
+      Resolvers.PrivateMessage,
+      Resolvers.GroupMessage
   other-modules:
       Paths_xcqbot
   hs-source-dirs:

@@ -34,7 +34,6 @@ onPrivateMessage msg_info =
         else Nothing
 
 call :: Object -> Maybe ByteString
---call obj = obj >>= RPM.isPrivateMessageM >> RPM.getMessageInfo obj >>= onPrivateMessage >>= Just $ encode
 call obj = do
     RPM.isPrivateMessageM obj
     msgi <- RPM.getMessageInfo obj
