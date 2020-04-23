@@ -21,6 +21,15 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- scotty
+- bytestring
+- aeson
+- unordered-containers
+- text
+- scientific
+- req
+- xml-conduit
+- html-conduit
 
 library:
   source-dirs: src

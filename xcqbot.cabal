@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ef0f8d0a71a66a96f6e1e167fe3acb3cae019fc16c22f719f9fb2bc86719d6c6
+-- hash: e7df71034afc700b36b2cfb4b5eb27e401cd51042a3e016868a083c83cd8d2bf
 
 name:           xcqbot
 version:        0.1.0.0
@@ -27,24 +27,28 @@ source-repository head
 
 library
   exposed-modules:
-      Dispatcher,
-      Callbacks.PrivateMessage,
-      Callbacks.GroupMessage,
-      Resolvers.Resolver,
-      Resolvers.PrivateMessage,
+      Callbacks.GroupMessage
+      Callbacks.PrivateMessage
+      Dispatcher
+      HTML.Node
       Resolvers.GroupMessage
+      Resolvers.PrivateMessage
+      Resolvers.Resolver
   other-modules:
       Paths_xcqbot
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
-    , scotty
+      aeson
+    , base >=4.7 && <5
     , bytestring
-    , aeson
-    , unordered-containers
-    , text
+    , html-conduit
+    , req
     , scientific
+    , scotty
+    , text
+    , unordered-containers
+    , xml-conduit
   default-language: Haskell2010
 
 executable xcqbot-exe
@@ -55,13 +59,17 @@ executable xcqbot-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
-    , xcqbot
-    , scotty
+      aeson
+    , base >=4.7 && <5
     , bytestring
-    , aeson
-    , unordered-containers
+    , html-conduit
+    , req
+    , scientific
+    , scotty
     , text
+    , unordered-containers
+    , xcqbot
+    , xml-conduit
   default-language: Haskell2010
 
 test-suite xcqbot-test
@@ -73,9 +81,15 @@ test-suite xcqbot-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
-    , xcqbot
-    , scotty
+      aeson
+    , base >=4.7 && <5
     , bytestring
-    , aeson
+    , html-conduit
+    , req
+    , scientific
+    , scotty
+    , text
+    , unordered-containers
+    , xcqbot
+    , xml-conduit
   default-language: Haskell2010

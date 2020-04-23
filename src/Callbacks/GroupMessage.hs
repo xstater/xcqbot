@@ -29,10 +29,10 @@ onGroupMessage msg_info =
     case (RGM.group_id msg_info) of
         (Just 795831442) -> Just Reply {
             reply = case (RGM.message msg_info) of
-                (Just msg) -> msg
+                (Just msg) -> mconcat ["[CQ:at,qq=2953415341]",msg]
                 Nothing -> "",
             auto_escape = False,
-            at_sender = True,
+            at_sender = False,
             delete = False,
             kick = False,
             ban = False,
