@@ -1,42 +1,22 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric #-}
 module Callbacks.PrivateMessage(
-    Reply(Reply,reply,auto_escape),
-    call
+    onPrivateMessage
 )where
 
 import Data.Text
 import Data.Aeson
-import Data.ByteString.Lazy
-import Data.Monoid
+import Web.Scotty
+import qualified Data.ByteString.Lazy as BS
 import Control.Monad
 import qualified Resolvers.Resolver as R
 import qualified Resolvers.PrivateMessage as RPM
-import GHC.Generics
+import Modules.Link
+import Modules.Filter
+import Modules.Echo
 
-data Reply = Reply{
-    reply :: Text,
-    auto_escape :: Bool
-}deriving (Eq,Show,Generic)
-instance ToJSON Reply
 
-onPrivateMessage :: RPM.MessageInfo -> Maybe Reply
-onPrivateMessage msg_info =
-    if (RPM.user_id msg_info) == Just 1209635268 
-        then Just $ 
-            Reply {
-                reply = 
-                    case (RPM.message msg_info) of
-                        (Just msg) -> msg
-                        Nothing -> Data.Text.empty,
-                auto_escape = True
-            }
-        else Nothing
-
-call :: Object -> Maybe ByteString
-call obj = do
-    RPM.isPrivateMessageM obj
-    msgi <- RPM.getMessageInfo obj
-    rep <- onPrivateMessage msgi
-    return $ encode rep
+onPrivateMessage :: RPM.MessageInfo -> ActionM ()
+onPrivateMessage msginfo = do
+    filteQQ $ RPM.user_id msginfo
+    echoPrivateMessage msginfo
 

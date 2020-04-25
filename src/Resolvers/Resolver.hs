@@ -54,7 +54,6 @@ instance Resolvable Array where
     resolve (Array a) = Just a
     resolve _ = Nothing 
 
-
 getItem :: Resolvable a => Text -> Object -> Maybe a
 getItem k o = (HM.lookup k o) >>= resolve 
 

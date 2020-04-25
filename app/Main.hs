@@ -17,7 +17,6 @@ import Text.XML.Cursor
 import Text.XML
 import Dispatcher
 
-{--
 main :: IO ()
 main = scotty 23358 $ do
     post "/" $ do
@@ -28,14 +27,15 @@ main = scotty 23358 $ do
         liftAndCatchIO $ print json_data
         --liftAndCatchIO $ print $ getEventInfo <$> (decode bodydata :: Maybe Object)
         dispatch json_data
---}
 
+{--
 main :: IO ()
 main = runReq defaultHttpConfig $ do
     bs <- req GET (http "www.baidu.com") NoReqBody lbsResponse mempty 
     --liftIO $ B.putStrLn (responseBody bs)
     let cur = fromDocument $ Text.HTML.DOM.parseLBS $ responseBody bs
     liftIO $ print $ Data.Text.concat $ cur $/ element "head" &/ element "title" &// content
+--}
 
 {--
 main :: IO ()

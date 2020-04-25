@@ -1,16 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module Resolvers.PrivateMessage(
     MessageFrom(FromFriend,FromGroup,FromDiscuss,FromOther),
     Sex(Male,Female),
     Sender(Sender,qq,nickname,sex,age),
     MessageInfo(MessageInfo,from,message_id,user_id,message,font,sender),
-    isPrivateMessageM,
+    Reply(Reply,reply,auto_escape),
     getMessageInfo 
 )where
 
 import Data.Aeson
 import Data.Text
+import Data.Maybe
+import GHC.Generics
 import Resolvers.Resolver as R
 
 data MessageFrom =
@@ -39,14 +42,19 @@ data Sender = Sender {
 } deriving (Eq,Show)
 
 data MessageInfo = MessageInfo{
-    from :: Maybe MessageFrom,
-    message_id :: Maybe Int,
-    user_id :: Maybe Int,
-    message :: Maybe Text,
-    font :: Maybe Int,
+    from :: MessageFrom,
+    message_id :: Int,
+    user_id :: Int,
+    message :: Text,
+    font :: Int,
     sender :: Maybe Sender
 } deriving (Eq,Show)
 
+data Reply = Reply{
+    reply :: Text,
+    auto_escape :: Bool
+}deriving (Eq,Show,Generic)
+instance ToJSON Reply
 
 isPrivateMessageM :: Object -> Maybe ()
 isPrivateMessageM obj = R.getPostType obj >>= R.eqStringM "message" >> R.getMessageType obj >>= R.eqStringM "private"
@@ -60,11 +68,11 @@ getSender obj = Just Sender{
 }where sender_obj = getItem "sender" obj
 
 getMessageInfo :: Object -> Maybe MessageInfo
-getMessageInfo obj = Just MessageInfo{
-    from = getItem "sub_type" obj,
-    message_id = getItem "message_id" obj,
-    user_id = getItem "user_id" obj,
-    message = getItem "message" obj,
-    font = getItem "font" obj,
+getMessageInfo obj = isPrivateMessageM obj >> Just MessageInfo{
+    Resolvers.PrivateMessage.from = fromMaybe FromOther $ getItem "sub_type" obj,
+    message_id = fromMaybe 0 $ getItem "message_id" obj,
+    user_id = fromMaybe 0 $ getItem "user_id" obj,
+    message = fromMaybe "" $ getItem "message" obj,
+    font = fromMaybe 0 $ getItem "font" obj,
     sender = getSender obj
 }

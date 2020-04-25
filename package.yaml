@@ -28,6 +28,8 @@ dependencies:
 - text
 - scientific
 - req
+- mtl
+- transformers
 - xml-conduit
 - html-conduit
 

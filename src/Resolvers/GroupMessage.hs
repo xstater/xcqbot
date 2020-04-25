@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module Resolvers.GroupMessage(
     MessageType(NormalMessage,AnonymousMessage,NoticeMessage),
@@ -7,12 +8,14 @@ module Resolvers.GroupMessage(
     Sex(Male,Female,Unknown),
     Sender(Sender,qq,nickname,card,sex,age,area,level,role,title),
     MessageInfo(MessageInfo,message_type,message_id,group_id,user_id,anonymous,message,font,sender),
+    Reply(Reply,reply,auto_escape,at_sender,delete,kick,ban,ban_duration),
     getMessageInfo,
-    isGroupMessageM
 )where
 
 import Data.Aeson
 import Data.Text
+import Data.Maybe
+import GHC.Generics
 import qualified Resolvers.Resolver as R
 
 data MessageType = 
@@ -58,15 +61,26 @@ data Sender = Sender {
 }deriving (Eq,Show)
 
 data MessageInfo = MessageInfo {
-    message_type :: Maybe MessageType,
-    message_id :: Maybe Int,
-    group_id :: Maybe Int,
-    user_id :: Maybe Int,
+    message_type :: MessageType,
+    message_id :: Int,
+    group_id :: Int,
+    user_id :: Int,
     anonymous :: Maybe Anonymous,
-    message :: Maybe Text,
-    font :: Maybe Int,
+    message :: Text,
+    font :: Int,
     sender :: Maybe Sender
 }deriving (Eq,Show)
+
+data Reply = Reply {
+    reply :: Text,
+    auto_escape :: Bool,
+    at_sender :: Bool,
+    delete :: Bool,
+    kick :: Bool,
+    ban :: Bool,
+    ban_duration :: Int
+}deriving (Eq,Show,Generic)
+instance ToJSON Reply
 
 isGroupMessageM :: Object -> Maybe ()
 isGroupMessageM obj = R.getPostType obj >>= R.eqStringM "message" >> R.getMessageType obj >>= R.eqStringM "group"
@@ -96,14 +110,14 @@ getSender obj = do
     }
 
 getMessageInfo :: Object -> Maybe MessageInfo
-getMessageInfo obj = Just $ MessageInfo {
-    message_type = R.getItem "sub_type" obj,
-    message_id = R.getItem "message_id" obj,
-    group_id = R.getItem "group_id" obj,
-    user_id = R.getItem "user_id" obj,
+getMessageInfo obj = isGroupMessageM obj >> Just MessageInfo {
+    message_type = fromMaybe NormalMessage $ R.getItem "sub_type" obj,
+    message_id = fromMaybe 0 $ R.getItem "message_id" obj,
+    group_id = fromMaybe 0 $ R.getItem "group_id" obj,
+    user_id = fromMaybe 0 $ R.getItem "user_id" obj,
     anonymous = getAnonymous obj,
-    message = R.getItem "message" obj,
-    font = R.getItem "font" obj,
+    message = fromMaybe "" $ R.getItem "message" obj,
+    font = fromMaybe 0 $ R.getItem "font" obj,
     sender = getSender obj
 }
 
