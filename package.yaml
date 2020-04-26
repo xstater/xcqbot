@@ -28,7 +28,9 @@ dependencies:
 - text
 - scientific
 - req
+- modern-uri
 - mtl
+- exceptions
 - transformers
 - xml-conduit
 - html-conduit

@@ -21,7 +21,7 @@ import Modules.Echo
 onGroupMessage :: RGM.MessageInfo -> ActionM ()
 onGroupMessage msginfo = do
     filteGroup $ RGM.group_id msginfo
+    echoTitle msginfo  
     echoGroupMessage msginfo
-    --echoTitle msginfo  
 
 

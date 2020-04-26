@@ -7,38 +7,54 @@ module Modules.Link(
 import Data.Text
 import Data.Monoid
 import Data.Aeson
+import qualified Data.ByteString.Lazy as BS
 import Web.Scotty
 import Network.HTTP.Req
 import Text.HTML.DOM
 import Text.XML
 import Text.XML.Cursor
+import Text.URI
+import Control.Monad.Catch
+import Control.Monad.Trans.Maybe
+import Data.Functor.Identity
 import qualified Resolvers.GroupMessage as RGM
 
+handleParseError :: ParseException -> MaybeT ActionM URI
+handleParseError e = MaybeT $ return Nothing
 
+getURI :: Text -> MaybeT ActionM URI
+getURI lnk = mkURI lnk `catch` handleParseError
 
-getLinkHTML :: Text -> ActionM Document
-getLinkHTML lnk = do
-    bs <- runReq defaultHttpConfig $ do
-        resBody <- req GET (https lnk) NoReqBody lbsResponse mempty
-        return $ responseBody resBody
-    return $ Text.HTML.DOM.parseLBS bs
+getHTMLTitle :: Document -> Text
+getHTMLTitle doc = Data.Text.concat $ cur $/ element "head" &/ element "title" &// content
+    where cur = fromDocument doc
 
-getHTMLTitle :: Document -> ActionM Text
-getHTMLTitle doc = do
-    let cur = fromDocument doc
-    return $ Data.Text.concat $ cur $/ element "head" &/ element "title" &// content
-        
+getHTMLFromURI :: URI -> MaybeT ActionM BS.ByteString
+getHTMLFromURI uri = do
+    case useURI uri of
+        (Just (Left  (url,opts))) -> runReq defaultHttpConfig $ do
+            resbody <- req GET url NoReqBody lbsResponse mempty
+            return $ responseBody resbody
+        (Just (Right (url,opts))) -> runReq defaultHttpConfig $ do
+            resbody <- req GET url NoReqBody lbsResponse mempty
+            return $ responseBody resbody
+        _ -> MaybeT $ return Nothing
+
 
 echoTitle :: RGM.MessageInfo -> ActionM ()
 echoTitle msginfo = do
-    html <- getLinkHTML $ RGM.message msginfo
-    title <- getHTMLTitle html
-    raw $ encode RGM.Reply{
-        RGM.reply = title,
-        RGM.auto_escape = False,
-        RGM.at_sender = False,
-        RGM.delete = False,
-        RGM.kick = False,
-        RGM.ban = False,
-        RGM.ban_duration = 0
-    }
+    title <- runMaybeT $ do
+        uri <- getURI $ RGM.message msginfo
+        htmlbs <- getHTMLFromURI uri
+        return $ getHTMLTitle $ Text.HTML.DOM.parseLBS htmlbs
+    case title of
+        Nothing -> return ()
+        (Just t) -> raw (encode RGM.Reply {
+           RGM.reply = t,
+           RGM.auto_escape = False,
+           RGM.at_sender = False,
+           RGM.delete = False,
+           RGM.kick = False,
+           RGM.ban = False,
+           RGM.ban_duration = 0
+        }) >> finish
