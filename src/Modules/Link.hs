@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Modules.Link(
     echoTitle
@@ -29,15 +30,21 @@ getHTMLTitle :: Document -> Text
 getHTMLTitle doc = Data.Text.concat $ cur $/ element "head" &/ element "title" &// content
     where cur = fromDocument doc
 
+instance MonadHttp (MaybeT ActionM) where
+    handleHttpException httperr = MaybeT $ return Nothing
+
 getHTMLFromURI :: URI -> MaybeT ActionM BS.ByteString
 getHTMLFromURI uri = do
     case useURI uri of
-        (Just (Left  (url,opts))) -> runReq defaultHttpConfig $ do
+        --for http
+        (Just (Left  (url,opts))) -> do
             resbody <- req GET url NoReqBody lbsResponse mempty
             return $ responseBody resbody
-        (Just (Right (url,opts))) -> runReq defaultHttpConfig $ do
+        --for https
+        (Just (Right (url,opts))) -> do
             resbody <- req GET url NoReqBody lbsResponse mempty
             return $ responseBody resbody
+        --Cant resolve URI
         _ -> MaybeT $ return Nothing
 
 

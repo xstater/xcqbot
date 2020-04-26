@@ -22,36 +22,8 @@ import Control.Monad.Trans.Maybe
 main :: IO ()
 main = scotty 23358 $ do
     post "/" $ do
-        --msgdata <- (jsonData :: ActionM RawInfo) `rescue` (\msg -> (liftAndCatchIO $ print msg) >> finish)
         bodydata <- body
         let json_data = (decode bodydata :: Maybe Object)
-        --liftAndCatchIO $ print msgdata
         liftAndCatchIO $ print json_data
-        --liftAndCatchIO $ print $ getEventInfo <$> (decode bodydata :: Maybe Object)
         dispatch json_data
-
-{--
-main :: IO ()
-main = runReq defaultHttpConfig $ do
-    bs <- req GET (http "www.baidu.com") NoReqBody lbsResponse mempty 
-    --liftIO $ B.putStrLn (responseBody bs)
-    let cur = fromDocument $ Text.HTML.DOM.parseLBS $ responseBody bs
-    liftIO $ print $ Data.Text.concat $ cur $/ element "head" &/ element "title" &// content
---}
-
-{--
-main :: IO ()
-main = do
-    --print $ parseLT "<html><body><h1>asd</h1><br><br/></body></html>"
-    doc <- Text.HTML.DOM.readFile "/home/xstater/haskell/xcqbot/test.html"
-    --doc <- return $ parseLT "<html><head><title>nmsl</title></head><body><h1>asd</h1><br><br/></body></html>"
-    let cur = fromDocument doc
-    print $ Prelude.length $ child cur
-    --print doc
-    print $ Data.Text.concat $ cur $/ element "head" &/ element "title" &// content
---}
-
---main :: IO ()
---main = do
-    
 
