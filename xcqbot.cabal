@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 47b54885d856db9634f9913100505b1bad1e041b760c47ef83079ee12eb27d19
+-- hash: 51299aba2e7580ebd5c1ab57a2613fef1bf5ffab75c0b40b1760a39f6a04c909
 
 name:           xcqbot
 version:        0.1.0.0
@@ -29,10 +29,14 @@ library
   exposed-modules:
       Callbacks.GroupMessage
       Callbacks.PrivateMessage
+      Common.ExecShell
       Dispatcher
       Modules.Echo
       Modules.Filter
+      Modules.Help
       Modules.Link
+      Modules.ShowCPUInfo
+      Modules.ShowTemp
       Resolvers.GroupMessage
       Resolvers.PrivateMessage
       Resolvers.Resolver
@@ -48,6 +52,7 @@ library
     , html-conduit
     , modern-uri
     , mtl
+    , process
     , req
     , scientific
     , scotty
@@ -72,6 +77,7 @@ executable xcqbot-exe
     , html-conduit
     , modern-uri
     , mtl
+    , process
     , req
     , scientific
     , scotty
@@ -98,6 +104,7 @@ test-suite xcqbot-test
     , html-conduit
     , modern-uri
     , mtl
+    , process
     , req
     , scientific
     , scotty

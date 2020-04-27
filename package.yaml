@@ -34,6 +34,7 @@ dependencies:
 - transformers
 - xml-conduit
 - html-conduit
+- process
 
 library:
   source-dirs: src

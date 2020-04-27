@@ -71,6 +71,9 @@ data MessageInfo = MessageInfo {
     sender :: Maybe Sender
 }deriving (Eq,Show)
 
+instance R.Message MessageInfo where
+    getMessage = message 
+
 data Reply = Reply {
     reply :: Text,
     auto_escape :: Bool,
@@ -81,6 +84,17 @@ data Reply = Reply {
     ban_duration :: Int
 }deriving (Eq,Show,Generic)
 instance ToJSON Reply
+
+instance R.ReplyMessage Reply where
+    replyMessage txt = Reply {
+        reply = txt,
+        auto_escape = False,
+        at_sender = False,
+        delete = False,
+        kick = False,
+        ban = False,
+        ban_duration = 0
+    }
 
 isGroupMessageM :: Object -> Maybe ()
 isGroupMessageM obj = R.getPostType obj >>= R.eqStringM "message" >> R.getMessageType obj >>= R.eqStringM "group"

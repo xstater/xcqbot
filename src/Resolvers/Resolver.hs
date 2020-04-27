@@ -4,6 +4,8 @@
 
 module Resolvers.Resolver(
     Resolvable(resolve),
+    Message(getMessage),
+    ReplyMessage(replyMessage),
     getItem,
     getPostType,
     getMessageType,
@@ -75,3 +77,8 @@ getSubType = getItem "sub_type"
 eqStringM :: Text -> Text -> Maybe ()
 eqStringM str1 str2 = if str1 == str2 then Just () else Nothing
 
+class Message a where
+    getMessage :: a -> Text
+
+class ReplyMessage a where
+    replyMessage :: Text -> a

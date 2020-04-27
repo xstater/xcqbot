@@ -50,6 +50,9 @@ data MessageInfo = MessageInfo{
     sender :: Maybe Sender
 } deriving (Eq,Show)
 
+instance R.Message MessageInfo where
+    getMessage = message 
+
 data Reply = Reply{
     reply :: Text,
     auto_escape :: Bool

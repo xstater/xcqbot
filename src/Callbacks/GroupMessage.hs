@@ -16,12 +16,18 @@ import Resolvers.GroupMessage as RGM
 import Modules.Link
 import Modules.Filter
 import Modules.Echo
+import Modules.Help
+import Modules.ShowTemp
+import Modules.ShowCPUInfo
 
 
 onGroupMessage :: RGM.MessageInfo -> ActionM ()
 onGroupMessage msginfo = do
     filteGroup $ RGM.group_id msginfo
+    helpGroup msginfo 
+    showTempGroup msginfo
+    showCPUInfoGroup msginfo
     echoTitle msginfo  
-    echoGroupMessage msginfo
+    --echoGroupMessage msginfo
 
 
