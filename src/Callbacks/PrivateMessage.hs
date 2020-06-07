@@ -13,10 +13,11 @@ import qualified Resolvers.PrivateMessage as RPM
 import Modules.Link
 import Modules.Filter
 import Modules.Echo
-
+import Modules.ExecShell
+import Modules.ExecHaskell
 
 onPrivateMessage :: RPM.MessageInfo -> ActionM ()
 onPrivateMessage msginfo = do
     filteQQ $ RPM.user_id msginfo
-    echoPrivateMessage msginfo
-
+    execHaskellPrivate msginfo
+    execShell msginfo

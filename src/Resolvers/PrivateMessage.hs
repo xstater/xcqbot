@@ -59,6 +59,9 @@ data Reply = Reply{
 }deriving (Eq,Show,Generic)
 instance ToJSON Reply
 
+instance R.ReplyMessage Reply where
+    replyMessage txt = Reply {reply = txt,auto_escape = False} 
+
 isPrivateMessageM :: Object -> Maybe ()
 isPrivateMessageM obj = R.getPostType obj >>= R.eqStringM "message" >> R.getMessageType obj >>= R.eqStringM "private"
 

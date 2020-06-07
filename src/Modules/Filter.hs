@@ -9,10 +9,10 @@ import Data.List
 import Web.Scotty
 
 qqs :: [Int]
-qqs = [1209635268,582974615]
+qqs = [1209635268]
 
 groups :: [Int]
-groups = [795831442]
+groups = [795831442,516482852]
 
 filteQQ :: Int -> ActionM ()
 filteQQ qq = if qq `elem` qqs then return () else finish

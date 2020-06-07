@@ -19,7 +19,8 @@ import Modules.Echo
 import Modules.Help
 import Modules.ShowTemp
 import Modules.ShowCPUInfo
-
+import Modules.SayWhat
+import Modules.ExecHaskell
 
 onGroupMessage :: RGM.MessageInfo -> ActionM ()
 onGroupMessage msginfo = do
@@ -28,6 +29,8 @@ onGroupMessage msginfo = do
     showTempGroup msginfo
     showCPUInfoGroup msginfo
     echoTitle msginfo  
+    sayWhatGroup msginfo
     --echoGroupMessage msginfo
+    execHaskellGroup msginfo
 
 
