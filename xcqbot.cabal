@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 51299aba2e7580ebd5c1ab57a2613fef1bf5ffab75c0b40b1760a39f6a04c909
+-- hash: 530338a9e4971b11ae62bd6fc3c1a3aa2c7cf697063d42e7d4c95f4755aef6e4
 
 name:           xcqbot
 version:        0.1.0.0
@@ -32,9 +32,12 @@ library
       Common.ExecShell
       Dispatcher
       Modules.Echo
+      Modules.ExecHaskell
+      Modules.ExecShell
       Modules.Filter
       Modules.Help
       Modules.Link
+      Modules.SayWhat
       Modules.ShowCPUInfo
       Modules.ShowTemp
       Resolvers.GroupMessage
@@ -49,6 +52,7 @@ library
     , base >=4.7 && <5
     , bytestring
     , exceptions
+    , hint
     , html-conduit
     , modern-uri
     , mtl
@@ -74,6 +78,7 @@ executable xcqbot-exe
     , base >=4.7 && <5
     , bytestring
     , exceptions
+    , hint
     , html-conduit
     , modern-uri
     , mtl
@@ -101,6 +106,7 @@ test-suite xcqbot-test
     , base >=4.7 && <5
     , bytestring
     , exceptions
+    , hint
     , html-conduit
     , modern-uri
     , mtl
