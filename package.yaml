@@ -35,6 +35,7 @@ dependencies:
 - xml-conduit
 - html-conduit
 - process
+- hint
 
 library:
   source-dirs: src
