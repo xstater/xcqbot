@@ -36,6 +36,7 @@ dependencies:
 - html-conduit
 - process
 - hint
+- chronos
 
 library:
   source-dirs: src

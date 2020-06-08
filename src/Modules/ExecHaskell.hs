@@ -17,7 +17,20 @@ parseCmd :: Text -> Maybe String
 parseCmd text = (Data.Text.unpack . (Data.Text.replace "&#93;" "]") . (Data.Text.replace "&#91;" "[")) `fmap` Data.Text.stripPrefix "hs " text
 
 imports :: [String]
-imports = ["Prelude"]
+imports = [
+    "Prelude",
+    "Data.Text",
+    "Data.Aeson",
+    "Control.Monad",
+    "Control.Monad.Except",
+    "Control.Monad.Identity",
+    "Control.Monad.List",
+    "Control.Monad.Reader",
+    "Control.Monad.State",
+    "Control.Monad.Trans",
+    "Control.Monad.Writer",
+    "Chronos",
+    "Modules.ExecHaskell.Utility"]
 
 execHaskellGroup :: R.Message a => a -> ActionM ()
 execHaskellGroup msginfo = do

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 530338a9e4971b11ae62bd6fc3c1a3aa2c7cf697063d42e7d4c95f4755aef6e4
+-- hash: bf9ea69d1bf973055cd76473485153e082d696f6165e98fc07236ec9615bb838
 
 name:           xcqbot
 version:        0.1.0.0
@@ -33,6 +33,7 @@ library
       Dispatcher
       Modules.Echo
       Modules.ExecHaskell
+      Modules.ExecHaskell.Utility
       Modules.ExecShell
       Modules.Filter
       Modules.Help
@@ -51,6 +52,7 @@ library
       aeson
     , base >=4.7 && <5
     , bytestring
+    , chronos
     , exceptions
     , hint
     , html-conduit
@@ -77,6 +79,7 @@ executable xcqbot-exe
       aeson
     , base >=4.7 && <5
     , bytestring
+    , chronos
     , exceptions
     , hint
     , html-conduit
@@ -105,6 +108,7 @@ test-suite xcqbot-test
       aeson
     , base >=4.7 && <5
     , bytestring
+    , chronos
     , exceptions
     , hint
     , html-conduit
