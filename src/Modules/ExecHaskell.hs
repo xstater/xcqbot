@@ -19,7 +19,6 @@ parseCmd text = (Data.Text.unpack . (Data.Text.replace "&#93;" "]") . (Data.Text
 imports :: [String]
 imports = [
     "Prelude",
-    "Data.Text",
     "Data.Aeson",
     "Control.Monad",
     "Control.Monad.Except",
